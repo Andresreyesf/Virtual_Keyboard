@@ -30,34 +30,53 @@ public class MainActivity extends AppCompatActivity
                                    {'B', ' ', 'E', '0', '0', '0', '0', '0', '0'}};
     private int rowIndex;
     private int colIndex;
-    private int noBlinkCount = 0;
-    private int poorSigCount;
-    private boolean flagFinishWord;
-    private boolean flagBadSignal;
-    private boolean flagPause;
+    private int noBlinkCount;
+    private int badBlinkCount;
     private String finalWord;
+    ////flag variables
+    private boolean flagThread;
+    private boolean flagRequestBlink;
+    private boolean flagGetBlinks;
+    private boolean flagGetRawEEG;
+    private boolean flagFinishWord;
+    private boolean flagStopBackend;
+    private boolean flagPoorSig;
+    private boolean flagPause;
+
     ////View variables
     private ImageView keyboard;
     private ImageView imgStart;
     private EditText wordField;
     private ProgressBar progBar;
-    ////Handler Variables
-    private Handler eegHandler;
-    ////flag variables
-    private boolean flagGetRawEEG;
-    private boolean flagThread;
-    private boolean flagGetBlinks;
-    private boolean flagStopBackend;
+    ////Handler and Runnable Variables
+    private Handler eegHandler = new Handler();
+    Runnable runStartBlink = new Runnable() {
+        @Override
+        public void run()
+        {
+            if(!flagStopBackend)
+            {
+                if(!flagPoorSig)
+                {
+                    imgStart.setVisibility(View.VISIBLE);
+                    flagGetBlinks = true;
+                    flagRequestBlink = false;
+                }
+                else
+                {
+                    showToast("Mala calidad de la señal! Acomoda tu diadema");
+                }
+            }
+        }
+    };
+
     ////Bluetooth variables
     private BluetoothAdapter mBluetoothAdapter;
     ///////////////////////////
     /////TensorFlow model Variables
-    private float[] inputEEG;
-    private float[] blinkOutput;
     private int numBlinks;
     ////////////////////////////
     ////NeuroSky Variables
-    private short poorsignalValue;
     private short[] rawEEG = {0}; //short -> signed 16-bits int (-32768 to 32767)
     private int rawEEG_index = 0;
     private int numSamples;
@@ -132,7 +151,6 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onDataReceived(int datatype, int data, Object obj) {
             // You can handle the received data here
-            //Log.i(TAG,"onDataReceived");
             switch (datatype)
             {
                 case MindDataType.CODE_ATTENTION:
@@ -143,14 +161,17 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case MindDataType.CODE_POOR_SIGNAL:
                     //short pqValue[] = {(short)data};
-                    poorsignalValue = (short)data;
-                    if(poorsignalValue > 0)
+                    if((short)data > 0)
                     {
-                        poorSigCount++;
+                        flagPoorSig = true;
                     }
                     else
                     {
-                        poorSigCount = 0;
+                        flagPoorSig = false;
+                    }
+                    if(flagRequestBlink)
+                    {
+                            eegHandler.postDelayed(runStartBlink,1000);
                     }
                     break;
                 case MindDataType.CODE_RAW:
@@ -177,10 +198,10 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void run()
         {
-            inputEEG = new float[numSamples];
+            float[] inputEEG = new float[numSamples];
             ////Variables of tensorflow
             TensorFlowInferenceInterface tfmodel = new TensorFlowInferenceInterface(getAssets(), "file:///android_asset/fin1(5C)f_model.pb");
-            blinkOutput = new float[5];
+            float[] blinkOutput = new float[5];
             long[] input_shape = new long[]{1,numSamples,1};
             String outputNode = "output_node0";
             String[] outputNodes = {outputNode};
@@ -238,24 +259,24 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ////Variables initialization
         numSamples = 1024;
+        numBlinks = 4;
         rawEEG = new short[numSamples];
-        eegHandler = new Handler();
-        flagGetRawEEG = false;
+        //Flag Variables!
         flagThread = true;
+        flagRequestBlink = false;
         flagGetBlinks = false;
+        flagGetRawEEG = false;
+        flagFinishWord = false;
         flagStopBackend = false;
-        poorsignalValue = 200;
-        numBlinks = 10;
+        flagPause = false;
+        flagPoorSig = false;
         ////word building cycle
         currentPhase = 1;
         rowIndex = 0;
         colIndex = 0;
         noBlinkCount = 0;
-        poorSigCount = 0;
+        badBlinkCount = 0;
         finalWord = "";
-        flagFinishWord = false;
-        flagPause = false;
-        flagBadSignal = false;
         ////
         keyboard = findViewById(R.id.i_keyboard);
         imgStart = findViewById(R.id.i_square);
@@ -541,11 +562,12 @@ public class MainActivity extends AppCompatActivity
                 showToast("No entendí tu acción, intentalo de nuevo");
                 break;
         }
+        wordField.moveCursorToVisibleOffset();
         if(!flagFinishWord)
         {
             if(!flagPause)
             {
-                requestBlinkAction();
+                flagRequestBlink = true;
             }
         }
         else
@@ -556,28 +578,13 @@ public class MainActivity extends AppCompatActivity
             b.performClick();
         }
     }
-    public void requestBlinkAction()
-    {
-        Handler sleepHandler = new Handler();
-        sleepHandler.postDelayed(new Runnable() {
-            @Override
-            public void run()
-            {
-                if(!flagStopBackend)
-                {
-                    imgStart.setVisibility(View.VISIBLE);
-                    flagGetBlinks = true;
-                }
-            }
-        }, 1500);
-    }
     public void stopBackendProcess(View view)
     {
         flagStopBackend = true;
-        flagGetRawEEG = false;
         flagThread = false;
+        flagRequestBlink = false;
         flagGetBlinks = false;
-        flagFinishWord = true;
+        flagGetRawEEG = false;
         if (tgStreamReader != null && tgStreamReader.isBTConnected())
         {
             // Prepare for connecting
