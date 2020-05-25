@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">VirtualKeyboard</string>
+    <string name="text_title">Teclado Virtual BCI</string>
+    <string name="text_intro">Bienvenido! Esta app te permite construir palabras usando unicamente tus parpadeos,
+                                los cuales son detectados mediante tu actividad cerebral!</string>
+    <string name="text_instructions">En esta app tu vas a construir la palabra deseada seleccionando letra por letra.
+                                    Para seleccionar una letra, se te van a ir presentando las letras. Presiona el boton
+                                    cuando hayas terminado de leer. Justo cuando hayas terminado de seleccionar una letra,
+                                    se te presentaran 3 opciones: 1 seleccionar la siguiente letra, 2 repetir la seleccion
+                                    de la letra, 3 finalizar la palabra. Para escoger la opcion deseada debes parpadear 1 o 2 o 3
+                                    veces en el momento que aparezca un recuadro azul en la pantalla. El # de parpadeo que hagas
+                                    representará el # asociado a la opcion. Si no alcanzas a realizar la accion cuando se muestre
+                                    el cuadro azul, no te preocupes, espera a que vuelva a aparecer y realiza tu accion nuevamente.</string>
+    <string name="text_config1">Primero que todo debes verificar que el bluetooth se encuentre activado en tu celular. Luego debes encender el dispositivo Neurosky, y ponertelo en la cabeza de la forma que se muestra en la imagen</string>
+    <string name="text_config2">Luego de realizar los pasos anteriores, presiona el boton y espera un momento mientras se establece la conexion con el dispositivo. Cuando este proceso termine, preparate para comenzar a construir tu palabra!!</string>
+    <string name="text_footprint">Autor: Andres Felipe Reyes Fernandez \n Director: Camilo Camacho Poveda \n Codirector: Armando Mateus Rojas \n\n Universidad Santo Tomás</string>
+</resources>
