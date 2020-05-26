@@ -25,13 +25,13 @@ public class MainActivity extends AppCompatActivity
     ////Program variables
     private int currentPhase;
     private char[][] charMatrix = {{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'},
-                                   {'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q'},
-                                   {'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'},
-                                   {'B', ' ', 'E', '0', '0', '0', '0', '0', '0'}};
+            {'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q'},
+            {'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'},
+            {'B', ' ', 'E', '0', '0', '0', '0', '0', '0'}};
     private int rowIndex;
     private int colIndex;
     private int noBlinkCount;
-    private int badBlinkCount;
+    private int goodSigCount;
     private String finalWord;
     ////flag variables
     private boolean flagThread;
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity
     private boolean flagStopBackend;
     private boolean flagPoorSig;
     private boolean flagPause;
-
+    private boolean flagShowSigInfo;
     ////View variables
     private ImageView keyboard;
     private ImageView imgStart;
@@ -64,7 +64,11 @@ public class MainActivity extends AppCompatActivity
                 }
                 else
                 {
-                    showToast("Mala calidad de la señal! Acomoda tu diadema");
+                    if(flagShowSigInfo)
+                    {
+                        //TODO: mostrar textview: t_info -> mala señal, quitar toast
+                        showToast("Mala calidad de la señal! Acomoda tu diadema");
+                    }
                 }
             }
         }
@@ -99,8 +103,7 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public void run()
                         {
-                           showToast("Neurosky Connected");
-                           startWordSelection();
+                            startWordSelection();
                         }
                     });
                     break;
@@ -109,12 +112,12 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case ConnectionStates.STATE_GET_DATA_TIME_OUT:
                     // Do something when getting data timeout
-                    showToast("Get data time out!");
-
+                    showToast("Fallo en conexion de la diadema!!");
+                    /*
                     if (tgStreamReader != null && tgStreamReader.isBTConnected()) {
                         tgStreamReader.stop();
                         tgStreamReader.close();
-                    }
+                    }*/
                     break;
                 case ConnectionStates.STATE_STOPPED:
                     // Do something when stopped
@@ -160,19 +163,32 @@ public class MainActivity extends AppCompatActivity
                     //short medValue[] = {(short)data};
                     break;
                 case MindDataType.CODE_POOR_SIGNAL:
-                    //short pqValue[] = {(short)data};
+                    //long startTime = System.nanoTime();
                     if((short)data > 0)
                     {
+                        goodSigCount = 0;
                         flagPoorSig = true;
+                        flagShowSigInfo = true;
                     }
                     else
                     {
-                        flagPoorSig = false;
+                        if(flagPoorSig)
+                        {
+                            flagShowSigInfo = false;
+                            goodSigCount++;
+                            if(goodSigCount > 2)
+                            {
+                                flagPoorSig = false;
+                            }
+                        }
                     }
                     if(flagRequestBlink)
                     {
-                            eegHandler.postDelayed(runStartBlink,1000);
+                        eegHandler.postDelayed(runStartBlink,600);
                     }
+                   /* long endTime = System.nanoTime();
+                    long duration = (endTime - startTime);
+                    Log.i("Time_POORSIG(Nanosec): ", String.valueOf(duration));*/
                     break;
                 case MindDataType.CODE_RAW:
                     if(flagGetRawEEG)
@@ -211,43 +227,43 @@ public class MainActivity extends AppCompatActivity
             {
                 if(flagGetBlinks)
                 {
-                        ////EEG Section
-                        rawEEG_index = 0;
-                        flagGetRawEEG = true;
-                        //Thread.sleep(3000); //wait 3 seconds
-                        while(flagGetRawEEG)
-                        {
-                            //wait until rawEEG array is full.
-                        }
-                        eegHandler.post(new Runnable() {
-                            @Override
-                            public void run()
-                            {
-                                imgStart.setVisibility(View.INVISIBLE);
-                            }
-                        });
-                        ///////////////
-                        ////Tensorflow section
-                        // loading new input
-                        for (int i = 0; i < numSamples; ++i)
-                        {
-                            inputEEG[i]= rawEEG[i];
-                        }
-                        tfmodel.feed("lstm_7_input",inputEEG,input_shape); // INPUT_SHAPE is an long[] of expected shape, input is a float[] with the input data
-                        tfmodel.run(outputNodes, enableStats);
-                        tfmodel.fetch(outputNode, blinkOutput); // blink_output is a float[] (size of num_classes)
-                        numBlinks = findMaxIndex(blinkOutput);
-                        //showToast("Number of blinks: " + String.valueOf(numBlinks));
-                        ///////////////////////
-                        flagGetBlinks = false;
-                        eegHandler.post(new Runnable() {
-                            @Override
-                            public void run()
-                            {
-                                processBlinkResult();
-                            }
-                        });
+                    ////EEG Section
+                    rawEEG_index = 0;
+                    flagGetRawEEG = true;
+                    //Thread.sleep(3000); //wait 3 seconds
+                    while(flagGetRawEEG)
+                    {
+                        //wait until rawEEG array is full.
                     }
+                    eegHandler.post(new Runnable() {
+                        @Override
+                        public void run()
+                        {
+                            imgStart.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                    ///////////////
+                    ////Tensorflow section
+                    // loading new input
+                    for (int i = 0; i < numSamples; ++i)
+                    {
+                        inputEEG[i]= rawEEG[i];
+                    }
+                    tfmodel.feed("lstm_7_input",inputEEG,input_shape); // INPUT_SHAPE is an long[] of expected shape, input is a float[] with the input data
+                    tfmodel.run(outputNodes, enableStats);
+                    tfmodel.fetch(outputNode, blinkOutput); // blink_output is a float[] (size of num_classes)
+                    numBlinks = findMaxIndex(blinkOutput);
+                    //showToast("Number of blinks: " + String.valueOf(numBlinks));
+                    ///////////////////////
+                    flagGetBlinks = false;
+                    eegHandler.post(new Runnable() {
+                        @Override
+                        public void run()
+                        {
+                            processBlinkResult();
+                        }
+                    });
+                }
             }
         }
     };
@@ -270,12 +286,13 @@ public class MainActivity extends AppCompatActivity
         flagStopBackend = false;
         flagPause = false;
         flagPoorSig = false;
+        flagShowSigInfo = false;
         ////word building cycle
         currentPhase = 1;
         rowIndex = 0;
         colIndex = 0;
         noBlinkCount = 0;
-        badBlinkCount = 0;
+        goodSigCount = 0;
         finalWord = "";
         ////
         keyboard = findViewById(R.id.i_keyboard);
@@ -318,14 +335,15 @@ public class MainActivity extends AppCompatActivity
         //prgress bar visible wait connection
         showToast("Conectando la diadema Neurosky. Espera...");
         progBar.setVisibility(View.VISIBLE);
-        progBar.setIndeterminate(true);
+        //progBar.setIndeterminate(true);
         //progBar.animate();
     }
     public void startWordSelection()
     {
-        progBar.setIndeterminate(false);
-        progBar.setVisibility(View.INVISIBLE);
-        showToast("Preparate!! Ya vas a empezar!");
+        //progBar.setIndeterminate(false);
+        showToast("Conexion Realizada!! Preparate!");
+        wordField.setText(finalWord);
+        wordField.setSelection(wordField.getText().length());
         Handler startWordHandler = new Handler();
         startWordHandler.postDelayed(new Runnable() {
             @Override
@@ -334,7 +352,8 @@ public class MainActivity extends AppCompatActivity
                 imgStart.setVisibility(View.VISIBLE);
                 flagGetBlinks = true;
             }
-        },3000);
+        },4000);
+        progBar.setVisibility(View.INVISIBLE);
     }
     public void processBlinkResult()
     {
@@ -585,6 +604,7 @@ public class MainActivity extends AppCompatActivity
         flagRequestBlink = false;
         flagGetBlinks = false;
         flagGetRawEEG = false;
+        flagFinishWord = true;
         if (tgStreamReader != null && tgStreamReader.isBTConnected())
         {
             // Prepare for connecting
@@ -622,6 +642,4 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
-
-
 }
