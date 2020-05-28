@@ -1,6 +1,7 @@
 package com.example.tesis_andresreyes;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -599,10 +600,16 @@ public class MainActivity extends AppCompatActivity
         else
         {
             //Go to ResultsActivity
-            showToast("Felicidades!!!");
-            Button b = findViewById(R.id.b_stop);
-            b.performClick();
+            goNextActivity();
         }
+    }
+    public void goNextActivity()
+    {
+        Button b = findViewById(R.id.b_stop);
+        b.performClick();
+        Intent i = new Intent(this, ResultsActivity.class);
+        i.putExtra("speechText",finalWord);
+        startActivity(i);
     }
     public void stopBackendProcess(View view)
     {
