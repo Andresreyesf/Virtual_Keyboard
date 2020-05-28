@@ -13,39 +13,73 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
-        android:fontFamily="cursive"
-        android:text="@string/text_title"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:text="Comandos"
+        android:textAlignment="center"
         android:textColor="@color/gold"
         android:textSize="50sp"
         android:textStyle="bold"
-        android:textAlignment="center"
+        android:fontFamily="cursive"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.619"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/i_commands"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/colorcommands"
+        android:layout_height="113dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:src="@drawable/colorcomands"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/t_title" />
 
     <Button
         android:id="@+id/b_stop"
-        android:layout_width="64dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="4dp"
+        android:layout_width="91dp"
+        android:layout_height="39dp"
         android:backgroundTint="#f42526"
         android:onClick="stopBackendProcess"
-        android:text="Stop"
+        android:text="Detener"
+        android:textAlignment="center"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/i_commands" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="210dp"
+        app:layout_constraintTop_toBottomOf="@id/i_commands"
+        app:layout_constraintBottom_toTopOf="@id/prgbar"/>
+
+    <ProgressBar
+        android:id="@+id/prgbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="236dp"
+        app:layout_constraintBottom_toTopOf="@id/t_info"
+        app:layout_constraintTop_toBottomOf="@id/b_stop"/>
+
+    <TextView
+        android:id="@+id/t_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:backgroundTint="@color/white"
+        android:text="Mala señal, acomoda tu diadema"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/i_square"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/prgbar" />
 
     <ImageView
         android:id="@+id/i_square"
@@ -58,22 +92,15 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/prgbar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/t_word"
-        app:layout_constraintEnd_toStartOf="@+id/i_square"
-        app:layout_constraintStart_toStartOf="parent" />
+
 
     <EditText
         android:id="@+id/t_word"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:backgroundTint="@color/white"
         android:ems="10"
         android:inputType="text"
@@ -85,17 +112,19 @@
     <ImageView
         android:id="@+id/i_keyboard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="15dp"
+        android:layout_height="200dp"
         android:layout_marginLeft="15dp"
-        android:src="@drawable/letrasf1"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/letrasf3_10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.619"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/i_square"
         app:layout_constraintVertical_bias="0.851" />
+
+
 
 
 </android.support.constraint.ConstraintLayout>

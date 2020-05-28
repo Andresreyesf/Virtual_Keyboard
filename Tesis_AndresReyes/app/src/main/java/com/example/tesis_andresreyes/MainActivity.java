@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.neurosky.connection.ConnectionStates;
@@ -25,9 +26,9 @@ public class MainActivity extends AppCompatActivity
     ////Program variables
     private int currentPhase;
     private char[][] charMatrix = {{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'},
-            {'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q'},
-            {'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'},
-            {'B', ' ', 'E', '0', '0', '0', '0', '0', '0'}};
+                                   {'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q'},
+                                   {'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'},
+                                   {'B', ' ', 'E', '0', '0', '0', '0', '0', '0'}};
     private int rowIndex;
     private int colIndex;
     private int noBlinkCount;
@@ -42,12 +43,13 @@ public class MainActivity extends AppCompatActivity
     private boolean flagStopBackend;
     private boolean flagPoorSig;
     private boolean flagPause;
-    private boolean flagShowSigInfo;
+    private boolean flagInfoVisible;
     ////View variables
     private ImageView keyboard;
     private ImageView imgStart;
     private EditText wordField;
     private ProgressBar progBar;
+    private TextView infoText;
     ////Handler and Runnable Variables
     private Handler eegHandler = new Handler();
     Runnable runStartBlink = new Runnable() {
@@ -58,16 +60,21 @@ public class MainActivity extends AppCompatActivity
             {
                 if(!flagPoorSig)
                 {
+                    if(flagInfoVisible)
+                    {
+                        infoText.setVisibility(View.INVISIBLE);
+                        flagInfoVisible = false;
+                    }
                     imgStart.setVisibility(View.VISIBLE);
                     flagGetBlinks = true;
                     flagRequestBlink = false;
                 }
                 else
                 {
-                    if(flagShowSigInfo)
+                    if(!flagInfoVisible)
                     {
-                        //TODO: mostrar textview: t_info -> mala señal, quitar toast
-                        showToast("Mala calidad de la señal! Acomoda tu diadema");
+                        infoText.setVisibility(View.VISIBLE);
+                        flagInfoVisible = true;
                     }
                 }
             }
@@ -168,13 +175,11 @@ public class MainActivity extends AppCompatActivity
                     {
                         goodSigCount = 0;
                         flagPoorSig = true;
-                        flagShowSigInfo = true;
                     }
                     else
                     {
                         if(flagPoorSig)
                         {
-                            flagShowSigInfo = false;
                             goodSigCount++;
                             if(goodSigCount > 2)
                             {
@@ -184,7 +189,7 @@ public class MainActivity extends AppCompatActivity
                     }
                     if(flagRequestBlink)
                     {
-                        eegHandler.postDelayed(runStartBlink,600);
+                        eegHandler.postDelayed(runStartBlink,200);
                     }
                    /* long endTime = System.nanoTime();
                     long duration = (endTime - startTime);
@@ -286,7 +291,7 @@ public class MainActivity extends AppCompatActivity
         flagStopBackend = false;
         flagPause = false;
         flagPoorSig = false;
-        flagShowSigInfo = false;
+        flagInfoVisible = false;
         ////word building cycle
         currentPhase = 1;
         rowIndex = 0;
@@ -299,12 +304,14 @@ public class MainActivity extends AppCompatActivity
         imgStart = findViewById(R.id.i_square);
         wordField = findViewById(R.id.t_word);
         progBar = findViewById(R.id.prgbar);
+        infoText = findViewById(R.id.t_info);
 
         keyboard.setImageResource(R.drawable.letrasf1);
         wordField.setVisibility(View.VISIBLE);
         keyboard.setVisibility(View.VISIBLE);
         imgStart.setVisibility(View.INVISIBLE);
         progBar.setVisibility(View.INVISIBLE);
+        infoText.setVisibility(View.INVISIBLE);
         ////
         try
         {
@@ -333,14 +340,15 @@ public class MainActivity extends AppCompatActivity
         tgStreamReader.connect();
         blink_thread.start();
         //prgress bar visible wait connection
-        showToast("Conectando la diadema Neurosky. Espera...");
+        infoText.setText(R.string.text_conecting);
+        infoText.setVisibility(View.VISIBLE);
         progBar.setVisibility(View.VISIBLE);
-        //progBar.setIndeterminate(true);
-        //progBar.animate();
     }
     public void startWordSelection()
     {
-        //progBar.setIndeterminate(false);
+        progBar.setVisibility(View.INVISIBLE);
+        infoText.setVisibility(View.INVISIBLE);
+        infoText.setText(R.string.text_poorsig);
         showToast("Conexion Realizada!! Preparate!");
         wordField.setText(finalWord);
         wordField.setSelection(wordField.getText().length());
@@ -352,8 +360,7 @@ public class MainActivity extends AppCompatActivity
                 imgStart.setVisibility(View.VISIBLE);
                 flagGetBlinks = true;
             }
-        },4000);
-        progBar.setVisibility(View.INVISIBLE);
+        }, 4000);
     }
     public void processBlinkResult()
     {
@@ -581,7 +588,7 @@ public class MainActivity extends AppCompatActivity
                 showToast("No entendí tu acción, intentalo de nuevo");
                 break;
         }
-        wordField.moveCursorToVisibleOffset();
+        wordField.setSelection(wordField.getText().length());
         if(!flagFinishWord)
         {
             if(!flagPause)
