@@ -35,7 +35,7 @@ public class ResultsActivity extends AppCompatActivity {
             {
                 if(status != TextToSpeech.ERROR)
                 {
-                    Locale locSpanish = new Locale("spa", "MEX");
+                    Locale locSpanish = new Locale("spa", "COL");
                     speechMachine.setLanguage(locSpanish);
                 }
                 if (status == TextToSpeech.SUCCESS)
@@ -49,10 +49,13 @@ public class ResultsActivity extends AppCompatActivity {
 
     public void exitApp(View view)
     {
-        if(speechMachine !=null)
+        if(speechMachine != null)
         {
             speechMachine.stop();
             speechMachine.shutdown();
         }
+        Intent replyIntent = new Intent();
+        setResult(RESULT_OK,replyIntent);
+        finish();
     }
 }

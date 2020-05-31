@@ -275,6 +275,31 @@ public class MainActivity extends AppCompatActivity
     };
 
     @Override
+    protected void onStop()
+    {
+        super.onStop();
+        flagPause = true;
+        Log.d("ActivityState: ","onStop");
+    }
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        if(flagPause)
+        {
+            flagPause = false;
+            startWordSelection();
+        }
+        if(flagFinishWord)
+        {//start a new word
+            flagFinishWord = false;
+            finalWord = "";
+            startWordSelection();
+        }
+        Log.d("ActivityState: ","onStart");
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -320,37 +345,75 @@ public class MainActivity extends AppCompatActivity
             mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled())
             {
-                showToast("Por favor encienda el Bluetooth en su celular y reinicie la app");
+                showToast("Por favor encienda el Bluetooth en su celular");
                 finish();
+            }
+            else
+            {
+                ///neurosky section
+                tgStreamReader = new TgStreamReader(mBluetoothAdapter,tgStreamHandler);
+                if(tgStreamReader.isBTConnected())
+                {
+                    tgStreamReader.stop();
+                    tgStreamReader.close();
+                    tgStreamReader = null;
+                }
+                tgStreamReader.connect();
+                /////
+                blink_thread.start();
+                ///
+                infoText.setText(R.string.text_conecting);
+                infoText.setVisibility(View.VISIBLE);
+                progBar.setVisibility(View.VISIBLE);
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            showToast("No fue posible conectarse con el dispositivo");
+            showToast("No se pudo habilitar el bluetooth");
             Log.i(TAG, "error:" + e.getMessage());
             return;
         }
-        tgStreamReader = new TgStreamReader(mBluetoothAdapter,tgStreamHandler);
-        if(tgStreamReader!=null && tgStreamReader.isBTConnected())
+        Log.d("ActivityState: ","onCreate");
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) //Function to handle the result the next activity and receive the data back
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 2)
         {
-            tgStreamReader.stop();
-            tgStreamReader.close();
-            tgStreamReader = null;
+            if (resultCode == RESULT_OK)
+            {
+                flagThread = false;
+                flagStopBackend = true;
+                flagRequestBlink = false;
+                flagGetBlinks = false;
+                flagGetRawEEG = false;
+                if(tgStreamReader.isBTConnected())
+                {
+                    tgStreamReader.stop();
+                    tgStreamReader.close();
+                }
+                tgStreamReader = null;
+                if(!blink_thread.isAlive())
+                {
+                    Intent introReply = new Intent();
+                    setResult(RESULT_OK,introReply);
+                    finish();
+                }
+                else
+                {
+                    showToast("Presione detener!");
+                }
+            }
         }
-        tgStreamReader.connect();
-        blink_thread.start();
-        //prgress bar visible wait connection
-        infoText.setText(R.string.text_conecting);
-        infoText.setVisibility(View.VISIBLE);
-        progBar.setVisibility(View.VISIBLE);
     }
     public void startWordSelection()
     {
         progBar.setVisibility(View.INVISIBLE);
         infoText.setVisibility(View.INVISIBLE);
         infoText.setText(R.string.text_poorsig);
-        showToast("Conexion Realizada!! Preparate!");
+        showToast("Preparate! Ya vas a empezar!");
         wordField.setText(finalWord);
         wordField.setSelection(wordField.getText().length());
         Handler startWordHandler = new Handler();
@@ -605,11 +668,12 @@ public class MainActivity extends AppCompatActivity
     }
     public void goNextActivity()
     {
-        Button b = findViewById(R.id.b_stop);
-        b.performClick();
+        flagRequestBlink = false;
+        flagGetBlinks = false;
+        flagGetRawEEG = false;
         Intent i = new Intent(this, ResultsActivity.class);
         i.putExtra("speechText",finalWord);
-        startActivity(i);
+        startActivityForResult(i,2);
     }
     public void stopBackendProcess(View view)
     {
@@ -629,7 +693,10 @@ public class MainActivity extends AppCompatActivity
         tgStreamReader = null;
         if(!blink_thread.isAlive())
         {
-            showToast("Proceso finalizado exitosamente, puede cerrar la app");
+            showToast("Proceso finalizado exitosamente");
+            Intent introReply = new Intent();
+            setResult(RESULT_OK,introReply);
+            finish();
         }
     }
     public int findMaxIndex(float [] arr)
