@@ -31,8 +31,9 @@ public class IntroActivity extends AppCompatActivity {
         {
             if (resultCode == RESULT_OK)
             {
-                Log.d("Finish: ","Closing App!");
                 finish();
+                Log.d("Finish: ","Closing App!");
+                System.exit(0);
             }
         }
     }

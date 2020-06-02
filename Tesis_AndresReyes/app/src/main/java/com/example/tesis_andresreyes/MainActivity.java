@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void run()
         {
-            if(!flagStopBackend)
+            while(flagRequestBlink)
             {
                 if(!flagPoorSig)
                 {
@@ -188,10 +188,10 @@ public class MainActivity extends AppCompatActivity
                             }
                         }
                     }
-                    if(flagRequestBlink)
+                    /*if(flagRequestBlink)
                     {
-                        eegHandler.postDelayed(runStartBlink,200);
-                    }
+                        eegHandler.post(runStartBlink);
+                    }*/
                    /* long endTime = System.nanoTime();
                     long duration = (endTime - startTime);
                     Log.i("Time_POORSIG(Nanosec): ", String.valueOf(duration));*/
@@ -393,6 +393,7 @@ public class MainActivity extends AppCompatActivity
                 {
                     tgStreamReader.stop();
                     tgStreamReader.close();
+                    Log.d("NEUROSKY_THREAD: ","CORRECTLY STOPPED");
                 }
                 tgStreamReader = null;
                 if(!blink_thread.isAlive())
@@ -404,6 +405,7 @@ public class MainActivity extends AppCompatActivity
                 else
                 {
                     showToast("Presione detener!");
+                    blink_thread.interrupt();
                 }
             }
         }
@@ -658,6 +660,7 @@ public class MainActivity extends AppCompatActivity
             if(!flagPause)
             {
                 flagRequestBlink = true;
+                eegHandler.post(runStartBlink);
             }
         }
         else
