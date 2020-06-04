@@ -51,36 +51,8 @@ public class MainActivity extends AppCompatActivity
     private EditText wordField;
     private ProgressBar progBar;
     private TextView infoText;
-    ////Handler and Runnable Variables
-    private Handler eegHandler = new Handler();
-    Runnable runStartBlink = new Runnable() {
-        @Override
-        public void run()
-        {
-            while(flagRequestBlink)
-            {
-                if(!flagPoorSig)
-                {
-                    if(flagInfoVisible)
-                    {
-                        infoText.setVisibility(View.INVISIBLE);
-                        flagInfoVisible = false;
-                    }
-                    imgStart.setVisibility(View.VISIBLE);
-                    flagGetBlinks = true;
-                    flagRequestBlink = false;
-                }
-                else
-                {
-                    if(!flagInfoVisible)
-                    {
-                        infoText.setVisibility(View.VISIBLE);
-                        flagInfoVisible = true;
-                    }
-                }
-            }
-        }
-    };
+    ////Handler Variables
+    private Handler mainHandler = new Handler();
 
     ////Bluetooth variables
     private BluetoothAdapter mBluetoothAdapter;
@@ -107,7 +79,7 @@ public class MainActivity extends AppCompatActivity
                 case ConnectionStates.STATE_CONNECTED:
                     // Do something when connected
                     tgStreamReader.start();
-                    eegHandler.post(new Runnable() {
+                    mainHandler.post(new Runnable() {
                         @Override
                         public void run()
                         {
@@ -120,12 +92,12 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case ConnectionStates.STATE_GET_DATA_TIME_OUT:
                     // Do something when getting data timeout
-                    showToast("Fallo en conexion de la diadema!!");
-                    /*
+                    showToast("Fallo en conexion, reinicia la app!!");
+
                     if (tgStreamReader != null && tgStreamReader.isBTConnected()) {
                         tgStreamReader.stop();
                         tgStreamReader.close();
-                    }*/
+                    }
                     break;
                 case ConnectionStates.STATE_STOPPED:
                     // Do something when stopped
@@ -188,10 +160,6 @@ public class MainActivity extends AppCompatActivity
                             }
                         }
                     }
-                    /*if(flagRequestBlink)
-                    {
-                        eegHandler.post(runStartBlink);
-                    }*/
                    /* long endTime = System.nanoTime();
                     long duration = (endTime - startTime);
                     Log.i("Time_POORSIG(Nanosec): ", String.valueOf(duration));*/
@@ -231,17 +199,49 @@ public class MainActivity extends AppCompatActivity
             ///////////////////////////////////////////
             while(flagThread)
             {
+                if(flagRequestBlink)
+                {
+                    if(!flagPoorSig)
+                    {
+                        if(flagInfoVisible)
+                        {//Se aregló la señal de la diadema
+                            showToast("Listo!! Preparate para continuar");
+                            try {
+                                Thread.sleep(1500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            flagInfoVisible = false;
+                        }
+                        mainHandler.post(new Runnable() {
+                            @Override
+                            public void run()
+                            {
+                                imgStart.setVisibility(View.VISIBLE);
+                                flagGetBlinks = true;
+                            }
+                        });
+                        flagRequestBlink = false;
+                    }
+                    else
+                    {
+                        if(!flagInfoVisible)
+                        {
+                            showToast("Mala señal, reacomoda tu diadema!");
+                            flagInfoVisible = true;
+                        }
+                    }
+                }
                 if(flagGetBlinks)
                 {
                     ////EEG Section
                     rawEEG_index = 0;
                     flagGetRawEEG = true;
-                    //Thread.sleep(3000); //wait 3 seconds
                     while(flagGetRawEEG)
                     {
                         //wait until rawEEG array is full.
                     }
-                    eegHandler.post(new Runnable() {
+                    mainHandler.post(new Runnable() {
                         @Override
                         public void run()
                         {
@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity
                     //showToast("Number of blinks: " + String.valueOf(numBlinks));
                     ///////////////////////
                     flagGetBlinks = false;
-                    eegHandler.post(new Runnable() {
+                    mainHandler.post(new Runnable() {
                         @Override
                         public void run()
                         {
@@ -279,6 +279,8 @@ public class MainActivity extends AppCompatActivity
     {
         super.onStop();
         flagPause = true;
+        flagRequestBlink = false;
+        flagGetBlinks = false;
         Log.d("ActivityState: ","onStop");
     }
     @Override
@@ -336,8 +338,8 @@ public class MainActivity extends AppCompatActivity
         wordField.setVisibility(View.VISIBLE);
         keyboard.setVisibility(View.VISIBLE);
         imgStart.setVisibility(View.INVISIBLE);
-        progBar.setVisibility(View.INVISIBLE);
-        infoText.setVisibility(View.INVISIBLE);
+
+        infoText.setText(R.string.text_conecting);
         ////
         try
         {
@@ -362,9 +364,6 @@ public class MainActivity extends AppCompatActivity
                 /////
                 blink_thread.start();
                 ///
-                infoText.setText(R.string.text_conecting);
-                infoText.setVisibility(View.VISIBLE);
-                progBar.setVisibility(View.VISIBLE);
             }
         }
         catch (Exception e)
@@ -412,9 +411,8 @@ public class MainActivity extends AppCompatActivity
     }
     public void startWordSelection()
     {
-        progBar.setVisibility(View.INVISIBLE);
         infoText.setVisibility(View.INVISIBLE);
-        infoText.setText(R.string.text_poorsig);
+        progBar.setVisibility(View.INVISIBLE);
         showToast("Preparate! Ya vas a empezar!");
         wordField.setText(finalWord);
         wordField.setSelection(wordField.getText().length());
@@ -660,7 +658,6 @@ public class MainActivity extends AppCompatActivity
             if(!flagPause)
             {
                 flagRequestBlink = true;
-                eegHandler.post(runStartBlink);
             }
         }
         else
@@ -680,26 +677,28 @@ public class MainActivity extends AppCompatActivity
     }
     public void stopBackendProcess(View view)
     {
-        flagStopBackend = true;
         flagThread = false;
+        flagStopBackend = true;
         flagRequestBlink = false;
         flagGetBlinks = false;
         flagGetRawEEG = false;
-        flagFinishWord = true;
-        if (tgStreamReader != null && tgStreamReader.isBTConnected())
+        if(tgStreamReader.isBTConnected())
         {
-            // Prepare for connecting
             tgStreamReader.stop();
             tgStreamReader.close();
-            showToast("Neurosky ha finalizado exitosamente");
+            Log.d("NEUROSKY_THREAD: ","CORRECTLY STOPPED");
         }
         tgStreamReader = null;
         if(!blink_thread.isAlive())
         {
-            showToast("Proceso finalizado exitosamente");
             Intent introReply = new Intent();
             setResult(RESULT_OK,introReply);
             finish();
+        }
+        else
+        {
+            showToast("Presione salir nuevamente!");
+            blink_thread.interrupt();
         }
     }
     public int findMaxIndex(float [] arr)

@@ -42,7 +42,6 @@ public class IntroActivity extends AppCompatActivity {
     {
         myView.showNext();
     }
-
     public void showConfig(View view)
     {
         myView.showNext();
