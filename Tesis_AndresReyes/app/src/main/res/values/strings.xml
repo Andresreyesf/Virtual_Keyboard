@@ -3,30 +3,33 @@
     <string name="text_title">Teclado Virtual BCI</string>
     <string name="text_intro">Bienvenido! Esta app te permite construir palabras usando unicamente tus parpadeos,
                                 los cuales son detectados mediante tu actividad cerebral!</string>
-    <string name="text_instructions">En esta app tu vas a construir la palabra deseada seleccionando letra por letra.
-                                    Para seleccionar una letra, se te van a ir presentando las letras. Presiona el boton
-                                    cuando hayas terminado de leer. Justo cuando hayas terminado de seleccionar una letra,
-                                    se te presentaran 3 opciones: 1 seleccionar la siguiente letra, 2 repetir la seleccion
-                                    de la letra, 3 finalizar la palabra. Para escoger la opcion deseada debes parpadear 1 o 2 o 3
-                                    veces en el momento que aparezca un recuadro azul en la pantalla. El # de parpadeo que hagas
-                                    representará el # asociado a la opcion. Si no alcanzas a realizar la accion cuando se muestre
-                                    el cuadro azul, no te preocupes, espera a que vuelva a aparecer y realiza tu accion nuevamente.
-                                    por tal motivo es necesario quesdasfasdasdsdfasdfasdf
-                                    asdaasdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddasdasdasd
-                                    asdedararara
-    asdasdasd
-    as
-    dasdasdas
-    asdasdasasdasda
-    asdasdasdasd
-    asdasdasdasdas
-    dasdasdasdasd
-    asdasdasd
-    asda
-    sda
-    asdasdasd
-    asdasdasdasd
-    ttttttttt</string>
+    <string name="text_instructions"> Para seleccionar un caracter del teclado, puedes realizar unicamente 3 acciones posibles:
+                                    1 parpadeo, 2 parpadeos, o 3 parpadeos. Las letras de este teclado van a aparecer en 3
+                                    posibles colores: amarillo = 1 parpadeo, azul = 2 parpadeos, rojo = 3 parpadeos.
+                                    Cada acción(1, 2 o 3 parpadeos), la podrás realizar UNICAMENTE cuando se active
+                                    el testigo, que en este caso es un cuadro de color gris que se mostrará en la pantalla indicando
+                                    que debes empezar a realizar tu acción.\n
+
+                                    El proceso de selección de una letra consiste en 3 fases: en la primera fase, debes seleccionar
+                                    la fila en la que se encuentra tu letra. Para seleccionarla, debes realizar la acción correspondiente
+                                    al color en que se encuentra la fila.\n
+                                    En la segunda fase debes seleccionar el grupo de letras en la que se encuentra tu letra. Para eso
+                                    debes fijarte nuevamente en el color en que aparece tu letra, y realizar la acción correspondiente.\n
+                                    Finalmente, en la tercera fase seleccionarás la letra deseada, para eso debes fijarte nuevamente en
+                                    el color en que aparece tu letra, y realizar la acción correspondiente.\n
+
+                                    Luego de seleccionar una letra, el sistema te llevará automaticamente a la primera fase, para proceder a
+                                    seleccionar el siguiente caracter.\n
+
+                                    En la primera fase se puede apreciar que los caracteres de la fila inferior(borrar, espacio, y enter)
+                                    aparecen en color blanco. Si deseas seleccionar uno de estos 3 caracteres, debes esperar sin hacer nada
+                                    hasta que automaticamente los colores de estos tres caracteres cambien, quedando cada
+                                    caracter de un color diferente(Amarillo, azul y rojo). En ese momento debes realizar la acción correspondiente
+                                    al color del caracter que desees seleccionar. Luego de eso, el sistema te llevará automaticamente
+                                    a la primera fase o a la siguiente ventana en caso de que hayas seleccionado "Enter".\n
+                                    Nota: En la parte superior de la pantalla en la que se encuentra el teclado, podras encontrar un recuadro con los
+                                    comandos correspondientes a la selección de caracteres.
+    </string>
     <string name="text_config1">Primero que todo debes verificar que el bluetooth se encuentre activado en tu celular. Luego debes encender el dispositivo Neurosky, y ponertelo en la cabeza de la forma que se muestra en la imagen</string>
     <string name="text_config2">Luego de realizar los pasos anteriores, presiona el boton y espera un momento mientras se establece la conexion con el dispositivo. Cuando este proceso termine, preparate para comenzar a construir tu palabra!!</string>
     <string name="text_footprint">Autor: Andres Felipe Reyes Fernandez \n Director: Camilo Camacho Poveda \n Codirector: Armando Mateus Rojas \n\n Universidad Santo Tomás</string>

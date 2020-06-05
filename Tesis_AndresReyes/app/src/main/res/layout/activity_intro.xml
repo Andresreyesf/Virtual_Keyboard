@@ -40,7 +40,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
-            android:fontFamily="casual"
             android:text="@string/text_intro"
             android:textAlignment="center"
             android:textColor="@color/white"
@@ -53,9 +52,9 @@
             android:id="@+id/i_logo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
             android:src="@drawable/logo_usta"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -66,10 +65,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="casual"
+            android:layout_marginTop="20dp"
             android:text="@string/text_footprint"
             android:textAlignment="center"
             android:textColor="@color/white"
@@ -86,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:backgroundTint="@color/gold"
             android:onClick="showInstructions"
             android:text="COMENZAR!"
@@ -96,7 +93,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/t_p2" />
     </android.support.constraint.ConstraintLayout>
-
     <android.support.constraint.ConstraintLayout
         android:id="@+id/instructionsLayout"
         android:layout_width="match_parent"
@@ -126,16 +122,19 @@
             android:id="@+id/t_instructions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constrainedHeight="true"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
             android:scrollbars="vertical"
             android:text="@string/text_instructions"
-            android:textAlignment="center"
+            android:textAlignment="gravity"
             android:textColor="@color/white"
-            android:textSize="22sp"
+            android:textSize="18sp"
+            app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toTopOf="@id/b_instructions"
-            app:layout_constraintTop_toBottomOf="@id/t_titleInstructions"
-            tools:layout_editor_absoluteX="15dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/t_titleInstructions" />
 
         <Button
             android:id="@+id/b_instructions"
@@ -153,10 +152,11 @@
             app:layout_constraintTop_toBottomOf="@id/t_instructions" />
     </android.support.constraint.ConstraintLayout>
 
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/configLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@drawable/background1"
         android:orientation="vertical">
 
@@ -165,6 +165,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:fontFamily="cursive"
             android:text="Configuracion del dispositivo"
             android:textAlignment="center"
@@ -179,7 +181,9 @@
             android:id="@+id/t_config1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:text="@string/text_config1"
             android:textAlignment="center"
             android:textColor="@color/white"
@@ -193,7 +197,9 @@
             android:id="@+id/i_neurosky"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:src="@drawable/neurosky_set"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -204,26 +210,26 @@
             android:id="@+id/t_config2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:text="@string/text_config2"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/i_neurosky"
             app:layout_constraintBottom_toTopOf="@id/b_connect"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/i_neurosky" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/b_connect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
             android:backgroundTint="@color/gold"
             android:onClick="launchActivity"
             android:text="CONECTAR"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/t_config2" />
