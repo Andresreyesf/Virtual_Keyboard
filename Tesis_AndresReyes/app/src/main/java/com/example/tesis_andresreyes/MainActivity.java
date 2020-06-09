@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     private int colIndex;
     private int noBlinkCount;
     private int goodSigCount;
+    private int badSigCount;
     private String finalWord;
     ////flag variables
     private boolean flagThread;
@@ -146,13 +147,21 @@ public class MainActivity extends AppCompatActivity
                     //long startTime = System.nanoTime();
                     if((short)data > 0)
                     {
-                        goodSigCount = 0;
-                        flagPoorSig = true;
+                        if(!flagPoorSig)
+                        {
+                            goodSigCount = 0;
+                            badSigCount++;
+                            if(badSigCount > 4)
+                            {
+                                flagPoorSig = true;
+                            }
+                        }
                     }
                     else
                     {
                         if(flagPoorSig)
                         {
+                            badSigCount = 0;
                             goodSigCount++;
                             if(goodSigCount > 2)
                             {
@@ -207,7 +216,7 @@ public class MainActivity extends AppCompatActivity
                         {//Se aregló la señal de la diadema
                             showToast("Listo!! Preparate para continuar");
                             try {
-                                Thread.sleep(1500);
+                                Thread.sleep(3000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -326,6 +335,7 @@ public class MainActivity extends AppCompatActivity
         colIndex = 0;
         noBlinkCount = 0;
         goodSigCount = 0;
+        badSigCount = 0;
         finalWord = "";
         ////
         keyboard = findViewById(R.id.i_keyboard);
@@ -649,7 +659,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             default:
                 noBlinkCount = 0;
-                showToast("No entendí tu acción, intentalo de nuevo");
+                //showToast("No entendí tu acción, intentalo de nuevo");
                 break;
         }
         wordField.setSelection(wordField.getText().length());
