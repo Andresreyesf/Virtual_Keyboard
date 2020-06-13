@@ -92,8 +92,6 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
-
-
     <EditText
         android:id="@+id/t_word"
         android:layout_width="match_parent"
@@ -102,6 +100,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
         android:backgroundTint="@color/white"
+        android:cursorVisible="true"
         android:ems="10"
         android:inputType="text"
         android:text="Aqui se mostrará lo que escribes"

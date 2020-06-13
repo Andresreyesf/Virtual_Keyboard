@@ -472,7 +472,6 @@ public class MainActivity extends AppCompatActivity
                             if(rowIndex == 3)
                             {
                                 //go back to phase 1
-                                showToast("de vuelta a fase 1");
                                 //update keyboard (phase)
                                 keyboard.setImageResource(R.drawable.letrasf1);
                                 //update phase
@@ -636,7 +635,7 @@ public class MainActivity extends AppCompatActivity
                         //execute ACTION
                         if(rowIndex == 3)
                         {
-                            //terminar palabra/frase
+                            //terminar palabra o frase
                             flagFinishWord = true;
                         }
                         else
@@ -667,7 +666,14 @@ public class MainActivity extends AppCompatActivity
         {
             if(!flagPause)
             {
-                flagRequestBlink = true;
+                Handler delayRequest = new Handler();
+                delayRequest.postDelayed(new Runnable() {
+                    @Override
+                    public void run()
+                    {
+                        flagRequestBlink = true;
+                    }
+                },200);
             }
         }
         else

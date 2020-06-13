@@ -53,7 +53,7 @@ public class ResultsActivity extends AppCompatActivity {
                         {
                             speechMachine.speak(finalWord,TextToSpeech.QUEUE_ADD, null, null);
                         }
-                    },2000);
+                    },3000);
                 }
             }
         });
