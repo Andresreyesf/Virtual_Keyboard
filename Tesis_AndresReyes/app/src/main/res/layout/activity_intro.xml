@@ -11,21 +11,21 @@
         android:id="@+id/firstLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@drawable/background1">
+        android:background="@drawable/background1"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/t_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:fontFamily="cursive"
             android:text="@string/text_title"
-            android:textColor="@color/gold"
             android:textAlignment="center"
+            android:textColor="@color/gold"
             android:textSize="50sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,13 +38,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
             android:text="@string/text_intro"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/i_logo"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.526"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/t_title" />
 
@@ -52,11 +53,12 @@
             android:id="@+id/i_logo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:src="@drawable/logo_usta"
+            app:layout_constraintBottom_toTopOf="@+id/t_p2"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.526"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/t_p1" />
 
@@ -64,17 +66,16 @@
             android:id="@+id/t_p2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
             android:text="@string/text_footprint"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constrainedHeight="true"
-            app:layout_constraintBottom_toTopOf="@id/b_intro"
+            app:layout_constraintBottom_toTopOf="@+id/b_intro"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.571"
+            app:layout_constraintHorizontal_bias="0.526"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/i_logo" />
 
@@ -83,15 +84,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="20dp"
             android:backgroundTint="@color/gold"
             android:onClick="showInstructions"
             android:text="COMENZAR!"
             android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/t_p2" />
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
     <android.support.constraint.ConstraintLayout
         android:id="@+id/instructionsLayout"
@@ -123,8 +123,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:scrollbars="vertical"
             android:text="@string/text_instructions"
             android:textAlignment="gravity"
@@ -140,19 +141,15 @@
             android:id="@+id/b_instructions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
             android:backgroundTint="@color/gold"
             android:onClick="showConfig"
             android:text="ENTENDIDO"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/t_instructions" />
+            app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
-
-
     <android.support.constraint.ConstraintLayout
         android:id="@+id/configLayout"
         android:layout_width="match_parent"
@@ -181,7 +178,6 @@
             android:id="@+id/t_config1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
             android:text="@string/text_config1"
@@ -191,18 +187,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.483"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/i_neurosky"
             app:layout_constraintTop_toBottomOf="@id/t_titleConfig" />
 
         <ImageView
             android:id="@+id/i_neurosky"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
             android:src="@drawable/neurosky_set"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/t_config2"
             app:layout_constraintTop_toBottomOf="@id/t_config1"
             tools:layout_editor_absoluteY="314dp" />
 
@@ -210,7 +207,6 @@
             android:id="@+id/t_config2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:text="@string/text_config2"
@@ -226,14 +222,15 @@
             android:id="@+id/b_connect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
             android:backgroundTint="@color/gold"
             android:onClick="launchActivity"
             android:text="CONECTAR"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/t_config2" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
+
 
 </ViewFlipper>
