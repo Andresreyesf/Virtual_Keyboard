@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onRecordFail(int flag) {
             // You can handle the record error message here
-            Log.e(TAG,"onRecordFail: " +flag);
+            Log.e(TAG,"onRecordFail: " + flag);
 
         }
 
