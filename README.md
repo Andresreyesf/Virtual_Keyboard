@@ -12,7 +12,14 @@ This work presents the development of a tool that allows people to communicate, 
 
 ### Dataset
 
+[Dataset description notebook](https://github.com/Andresreyesf/brain_machine_interface_eyes_blinking/blob/master/training_notebooks/dataset.ipynb)
+
 ### Training Notebook
+
+* [FFT Analysis](https://github.com/Andresreyesf/brain_machine_interface_eyes_blinking/blob/master/training_notebooks/fft_blink.ipynb)
+* [Training notebook](https://github.com/Andresreyesf/brain_machine_interface_eyes_blinking/blob/master/training_notebooks/training.ipynb)
+* [Confusion Matrix](https://github.com/Andresreyesf/brain_machine_interface_eyes_blinking/blob/master/training_notebooks/confussion_matrix.ipynb)
+* [Results Analysis](https://github.com/Andresreyesf/brain_machine_interface_eyes_blinking/blob/master/training_notebooks/results.ipynb)
 
 ### Android App
 
