@@ -21,6 +21,8 @@ This work presents the development of a tool that allows people to communicate, 
 * [Confusion Matrix](https://github.com/Andresreyesf/brain_machine_interface_eyes_blinking/blob/master/training_notebooks/confussion_matrix.ipynb)
 * [Results Analysis](https://github.com/Andresreyesf/brain_machine_interface_eyes_blinking/blob/master/training_notebooks/results.ipynb)
 
+Conda enviroment available [here](https://github.com/Andresreyesf/brain_machine_interface_eyes_blinking/blob/master/training_notebooks/eyes_blinking.yml).
+
 ### Android App
 
 * Android SDK version: Android 10.0 (API level 29). The app also Works in previous versions from Android 6.0 (API level 23)
